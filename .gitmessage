@@ -1,0 +1,81 @@
+# <type>(<scope>): <简短描述>
+#
+# <详细描述>
+#
+# <footer>
+
+# ⚠️ 重要规则：
+# 1. scope 范围必填
+# 2. 简短描述和详细描述必须使用中文，禁止使用英文
+
+# type 类型说明：
+# feat:     新功能
+# fix:      修复bug
+# docs:     文档更新
+# style:    代码格式调整（不影响代码运行）
+# refactor: 重构（既不是新增功能，也不是修复bug）
+# perf:     性能优化
+# test:     测试相关
+# chore:    构建过程或辅助工具的变动
+# ci:       CI配置文件和脚本的变更
+# build:    构建系统或外部依赖的变更
+# revert:   回退之前的commit
+
+# scope 范围说明（必填，基于当前项目结构）：
+#
+# === 前端应用 ===
+# web-admin          - 商家后台 (Next.js)
+# web-super-admin    - 平台总控后台 (Next.js)
+# miniapp            - Taro 多端应用 (小程序/H5/App)
+# desktop-studio     - Tauri 桌面端 (React + Rust)
+#
+# === 后端微服务 ===
+# server-gateway     - API 网关
+# server-main        - 核心 API 服务
+# server-worker      - 通用异步任务消费者
+# server-image       - 图片处理服务
+# server-ai          - AI 智能服务 (Python/FastAPI)
+# server-notify      - 通知服务
+# server-file        - 文件存储/传输服务
+# server-report      - 报表与统计服务
+# server-payment     - 支付回调服务
+# server-audit       - 日志与审计服务
+#
+# === 共享库 ===
+# shared-types       - TypeScript 类型定义
+# ui-lib             - React 公共组件库
+# api-client         - 自动生成的 API 客户端
+# config-eslint      - ESLint/Prettier 共享配置
+# observability      - 日志、追踪、指标
+#
+# === 基础设施与配置 ===
+# infra              - 基础设施配置（docker-compose, 部署脚本等）
+# config             - 环境变量与密钥模板
+# docker             - Dockerfile 相关
+# scripts            - 运维脚本
+# tools              - 开发辅助工具
+# docs               - 项目文档
+#
+# === 根目录 ===
+# root               - 根目录配置文件（.gitignore, .npmrc, package.json 等）
+
+# 简短描述（必须中文）：
+# 使用祈使句，简洁明了，结尾不加句号
+
+# 详细描述（可选，必须中文）：
+# 说明代码变更的动机以及与之前行为的对比
+
+# footer 关闭的Issue（可选）：
+# Closes #123, #456
+
+# ✅ 正确示例：
+# feat(server-main): 添加用户认证功能
+#
+# 实现了基于JWT的用户登录和注册功能
+# 支持密码加密存储和token刷新机制
+#
+# Closes #123
+
+# ❌ 错误示例：
+# feat(backend): add user authentication  ← scope不规范，描述用了英文
+# fix: 修复登录问题                        ← 缺少scope

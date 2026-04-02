@@ -1,0 +1,41 @@
+{
+    "mcpServers": {
+      "playwright": {
+        "command": "npx",
+        "args": [
+          "@playwright/mcp@latest",
+          "--output-dir",
+          "E:\\Projects\\nuxt-theme-engine\\.playwright-mcp\\img"
+        ]
+      },
+      "context7": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@upstash/context7-mcp",
+        "--api-key",
+        "ctx7sk-a7921c64-c480-46ba-a57d-9e97f4a9376d"
+      ]
+    },
+    "git-mcp-server": {
+      "command": "uvx",
+      "args": [
+        "mcp-server-git",
+        "--repository",
+        "E:\\Projects\\nuxt-theme-engine"
+      ]
+    },
+    "server-memory": {
+      "command": "cmd",
+      "args": [
+        "/c",
+        "npx",
+        "-y",
+        "@modelcontextprotocol/server-memory"
+      ],
+      "env": {
+        "MEMORY_FILE_PATH": "E:\\Projects\\nuxt-theme-engine\\.cursor\\mcp\\memory.jsonl"
+      }
+    }
+    }
+  }
