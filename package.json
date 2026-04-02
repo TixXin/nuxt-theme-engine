@@ -1,0 +1,49 @@
+{
+  "name": "@tixxin/nuxt-theme-engine",
+  "version": "0.0.1",
+  "type": "module",
+  "description": "A Nuxt 4 theme engine with layered themes, typed contracts, and runtime theme switching.",
+  "license": "MIT",
+  "main": "./dist/module.mjs",
+  "types": "./dist/types.d.mts",
+  "exports": {
+    ".": {
+      "types": "./dist/types.d.mts",
+      "import": "./dist/module.mjs"
+    },
+    "./runtime/*": "./dist/runtime/*"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "nuxi dev playground",
+    "dev:prepare": "nuxi prepare playground",
+    "build": "pnpm --filter @tixxin/theme-contracts build && nuxt-module-build",
+    "prepack": "pnpm build",
+    "lint": "eslint .",
+    "typecheck": "pnpm dev:prepare && tsc --noEmit -p tsconfig.json && vue-tsc --noEmit -p playground/.nuxt/tsconfig.json"
+  },
+  "peerDependencies": {
+    "nuxt": "^4.0.0"
+  },
+  "dependencies": {
+    "@tixxin/theme-contracts": "workspace:*",
+    "defu": "^6.1.6",
+    "fast-glob": "^3.3.3",
+    "pathe": "^2.0.3",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@nuxt/devtools-kit": "4.0.0-alpha.3",
+    "@nuxt/kit": "^4.4.2",
+    "@nuxt/module-builder": "^1.0.2",
+    "@types/node": "^25.5.0",
+    "eslint": "^10.1.0",
+    "nuxt": "^4.4.2",
+    "typescript": "^5.9.3",
+    "unbuild": "^3.6.1",
+    "vue": "^3.5.31",
+    "vue-tsc": "^3.2.6"
+  }
+}

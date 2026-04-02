@@ -1,0 +1,31 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "strict": true,
+    "lib": ["ES2022", "DOM"],
+    "jsx": "preserve",
+    "declaration": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "verbatimModuleSyntax": true,
+    "types": ["node"],
+    "baseUrl": ".",
+    "paths": {
+      "@tixxin/theme-contracts": [
+        "./packages/theme-contracts/src"
+      ]
+    }
+  },
+  "include": [
+    "src/module.ts",
+    "src/types.ts",
+    "src/**/*.d.ts",
+    "src/utils/**/*.ts",
+    "build.config.ts",
+    "packages/**/*.ts"
+  ]
+}

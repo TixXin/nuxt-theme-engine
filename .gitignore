@@ -1,0 +1,73 @@
+node_modules
+dist
+.nuxt
+.output
+playground/.nuxt
+playground/.output
+.playwright-mcp
+# ------------------------------
+# Nuxt 核心构建与缓存
+# ------------------------------
+# 构建输出目录 (Nuxt build artifacts)
+.output/
+.data/
+.nuxt/
+.nitro/
+.cache/
+dist/
+
+# ------------------------------
+# 依赖与包管理
+# ------------------------------
+# Node.js 依赖 (pnpm/yarn/npm)
+node_modules/
+
+# pnpm 特有文件 (如果使用 pnpm)
+.pnp
+.pnp.js
+
+# ------------------------------
+# 环境变量与敏感信息
+# ------------------------------
+# 本地环境变量 (包含密钥，严禁提交)
+.env.local
+.env.*.local
+
+# 通用 .env 文件 (建议忽略，除非你需要提交默认模板)
+# 通常建议提交 .env.example 作为模板，而忽略真实的 .env
+.env
+.env.development
+.env.production
+
+# ------------------------------
+# 日志与系统文件
+# ------------------------------
+# 日志文件
+logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# 操作系统文件
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# ------------------------------
+# 测试与覆盖率
+# ------------------------------
+coverage/
+.nyc_output/
+
+# ------------------------------
+# 其他
+# ------------------------------
+# 临时文件
+tmp/
+temp/
