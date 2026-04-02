@@ -1,0 +1,6 @@
+{
+  "name": "aurora",
+  "extends": "base",
+  "label": "Aurora Theme",
+  "description": "An inheriting theme that overrides list layout and adds decorative widgets."
+}

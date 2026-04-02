@@ -1,0 +1,6 @@
+[data-theme="aurora"] {
+  --theme-bg: #111827;
+  --theme-text: #f8fafc;
+  --theme-accent: #a855f7;
+  --theme-muted: rgba(196, 181, 253, 0.7);
+}

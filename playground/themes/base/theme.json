@@ -1,0 +1,5 @@
+{
+  "name": "base",
+  "label": "Base Theme",
+  "description": "The foundational theme used for component contracts and fallback rendering."
+}
