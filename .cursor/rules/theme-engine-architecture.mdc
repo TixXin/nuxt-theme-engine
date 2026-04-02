@@ -1,0 +1,26 @@
+---
+description: Nuxt 主题引擎架构约束
+alwaysApply: true
+---
+
+# 你需要阅读了解docs目录下所有文档
+
+# Theme Engine Boundaries
+
+- 将每个主题视为独立的 Nuxt Layer，拥有自己的 `theme.json`、`app/components/`、`app/assets/` 和可选 `extends` 继承链。
+- 主题引擎只负责组件覆盖、样式覆盖、主题状态、加载策略和调试能力；不要把业务路由或核心业务模型塞进主题层。
+- 跨主题公共组件一律通过 `<ThemeComponent>` 分发；主项目中不要直接硬编码 `AuroraPostList` 这类具体主题组件名。
+- 公共 Props 与契约放在 `@tixxin/theme-contracts` 或生成的类型声明中；新增主题特有数据时，优先使用可选字段或主题内部独立获取，不要污染通用契约。
+- 主题专属 KV 配置必须按主题隔离，并通过 `useThemeConfig()` 访问；不要在主题之间做隐式配置迁移。
+- 主题专属附加组件可以在主题内部直接使用，但除非被提升为跨主题契约，否则不要接入全局分发体系。
+- 主题全局样式必须包裹在 `[data-theme="xxx"]` 或其暗色变体作用域内；基础主题必须声明所需的 `--theme-*` 变量，且主题切换时禁止使用 `transition: all`。
+
+## Example
+
+```vue
+<!-- Good -->
+<ThemeComponent name="PostList" :posts="posts" />
+
+<!-- Bad -->
+<AuroraPostList :posts="posts" />
+```
