@@ -1,8 +1,9 @@
 <script lang="ts">
 import { computed, defineAsyncComponent, defineComponent, h, useAttrs, useSlots } from 'vue'
 import { themeComponentLoaders, themeComponentRegistry } from '#build/theme-engine.registry.mjs'
-import type { ThemeContractName } from '@tixxin/theme-contracts'
 import { useThemeEngine } from '../composables/useThemeEngine'
+
+type GeneratedThemeComponentName = import('#build/theme-engine.contracts.mjs').GeneratedThemeComponentName
 
 const asyncComponentCache = new Map<string, ReturnType<typeof defineAsyncComponent>>()
 
@@ -11,11 +12,11 @@ export default defineComponent({
   inheritAttrs: false,
   props: {
     name: {
-      type: String as () => ThemeContractName,
+      type: String as () => GeneratedThemeComponentName,
       required: true
     }
   },
-  setup(props: { name: ThemeContractName }) {
+  setup(props: { name: GeneratedThemeComponentName }) {
     const attrs = useAttrs()
     const slots = useSlots()
     const { currentTheme } = useThemeEngine()

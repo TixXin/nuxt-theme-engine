@@ -1,5 +1,4 @@
 import { promises as fs } from 'node:fs'
-import { resolve } from 'pathe'
 
 function parseContractNames(source: string) {
   const match = source.match(/themeContractNames\s*=\s*\[([\s\S]*?)\]\s*as const/)
@@ -14,8 +13,7 @@ function parseContractNames(source: string) {
     .filter((name): name is string => Boolean(name))
 }
 
-export async function generateThemeComponentDts(rootDir: string) {
-  const contractsSourcePath = resolve(rootDir, 'packages/theme-contracts/src/index.ts')
+export async function generateThemeComponentDts(contractsSourcePath: string, contractsImportId: string) {
   const source = await fs.readFile(contractsSourcePath, 'utf8')
   const names = parseContractNames(source)
   const union = names.length > 0
@@ -23,14 +21,22 @@ export async function generateThemeComponentDts(rootDir: string) {
     : 'never'
 
   return `import type { DefineComponent } from 'vue'
-import type { ThemeComponentContracts } from '@tixxin/theme-contracts'
+import type { ThemeComponentContracts } from ${JSON.stringify(contractsImportId)}
 
-export type GeneratedThemeComponentName = ${union}
-export type GeneratedThemeComponentContracts = ThemeComponentContracts
-export type ThemeComponentDiscriminatedProps = {
-  [K in keyof ThemeComponentContracts]: { name: K } & ThemeComponentContracts[K]
-}[keyof ThemeComponentContracts]
+declare module '#build/theme-engine.contracts.mjs' {
+  export const themeEngineContracts: {
+    entry: string
+    importId: string
+  }
 
+  export type GeneratedThemeComponentName = ${union}
+  export type GeneratedThemeComponentContracts = ThemeComponentContracts
+  export type ThemeComponentDiscriminatedProps = {
+    [K in keyof ThemeComponentContracts]: { name: K } & ThemeComponentContracts[K]
+  }[keyof ThemeComponentContracts]
+}
+
+type ThemeComponentDiscriminatedProps = import('#build/theme-engine.contracts.mjs').ThemeComponentDiscriminatedProps
 declare const ThemeComponent: DefineComponent<ThemeComponentDiscriminatedProps>
 
 declare module 'vue' {

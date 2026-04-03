@@ -5,6 +5,8 @@ declare module '#build/theme-engine.options.mjs' {
     cookieKey: string
     lazyLoadThemes: boolean
     requiredCssVars: string[]
+    contractsEntry: string
+    contractsImportId: string
   }
 
   export const themeEngineThemeNames: string[]
@@ -26,6 +28,19 @@ declare module '#build/theme-engine.registry.mjs' {
   }>>
 
   export const themeComponentLoaders: Record<string, Record<string, () => Promise<{ default: Component }>>>
+}
+
+declare module '#build/theme-engine.contracts.mjs' {
+  export const themeEngineContracts: {
+    entry: string
+    importId: string
+  }
+
+  export type GeneratedThemeComponentName = string
+  export type GeneratedThemeComponentContracts = Record<string, Record<string, unknown>>
+  export type ThemeComponentDiscriminatedProps = {
+    name: GeneratedThemeComponentName
+  } & Record<string, unknown>
 }
 
 declare module '#build/theme-engine.css-report.mjs' {

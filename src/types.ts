@@ -4,6 +4,8 @@ export interface ThemeEngineOptions {
   cookieKey?: string
   lazyLoadThemes?: boolean
   requiredCssVars?: string[]
+  contractsEntry?: string
+  contractsImportId?: string
 }
 
 export interface ThemeJson {

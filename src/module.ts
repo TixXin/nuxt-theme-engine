@@ -1,4 +1,5 @@
 import { promises as fs } from 'node:fs'
+import { createRequire } from 'node:module'
 import {
   addComponent,
   addImportsDir,
@@ -23,7 +24,56 @@ const DEFAULTS: Required<ThemeEngineOptions> = {
   defaultTheme: 'base',
   cookieKey: 'theme-pref',
   lazyLoadThemes: false,
-  requiredCssVars: []
+  requiredCssVars: [],
+  contractsEntry: '@tixxin/theme-contracts',
+  contractsImportId: '@tixxin/theme-contracts'
+}
+
+const require = createRequire(import.meta.url)
+
+async function pathExists(path: string) {
+  try {
+    await fs.access(path)
+    return true
+  }
+  catch {
+    return false
+  }
+}
+
+function isLocalSpecifier(specifier: string) {
+  return specifier.startsWith('.')
+    || specifier.startsWith('/')
+    || specifier.startsWith('~')
+    || /^[A-Za-z]:[\\/]/.test(specifier)
+}
+
+async function resolveContractsEntry(
+  entry: string,
+  importId: string,
+  rootDir: string,
+  moduleRoot: string,
+  aliases: Record<string, string | undefined>
+) {
+  const internalDefaultEntry = resolve(moduleRoot, 'packages/theme-contracts/src/index.ts')
+  if ((entry === '@tixxin/theme-contracts' || entry === 'packages/theme-contracts/src/index.ts') && await pathExists(internalDefaultEntry)) {
+    return internalDefaultEntry
+  }
+
+  const aliasTarget = aliases[entry] ?? aliases[importId]
+  if (typeof aliasTarget === 'string') {
+    return isLocalSpecifier(aliasTarget)
+      ? resolve(rootDir, aliasTarget)
+      : aliasTarget
+  }
+
+  if (isLocalSpecifier(entry)) {
+    return resolve(rootDir, entry)
+  }
+
+  return require.resolve(entry, {
+    paths: [rootDir, moduleRoot]
+  })
 }
 
 function serializeRegistry(registry: GeneratedThemeRegistry) {
@@ -92,6 +142,13 @@ function serializeCssReport(report: CssVariableReport[]) {
   return `export const themeCssVariableReport = ${JSON.stringify(report, null, 2)}\n`
 }
 
+function serializeContracts(entry: string, importId: string) {
+  return `export const themeEngineContracts = ${JSON.stringify({
+    entry,
+    importId
+  }, null, 2)}\n`
+}
+
 export default defineNuxtModule<ThemeEngineOptions>({
   meta: {
     name: '@tixxin/nuxt-theme-engine',
@@ -109,18 +166,30 @@ export default defineNuxtModule<ThemeEngineOptions>({
       ...moduleOptions
     }
     const themesDir = resolve(nuxt.options.rootDir, options.themesDir)
+    const contractsImportId = options.contractsImportId
+    const contractsEntry = await resolveContractsEntry(
+      options.contractsEntry,
+      contractsImportId,
+      nuxt.options.rootDir,
+      moduleRoot,
+      nuxt.options.alias as Record<string, string | undefined>
+    )
     const themes = await loadThemeDefinitions(themesDir)
     const defaultTheme = themes.some(theme => theme.name === options.defaultTheme)
       ? options.defaultTheme
       : (themes[0]?.name ?? options.defaultTheme)
     const resolvedOptions = {
       ...options,
+      contractsEntry,
+      contractsImportId,
       defaultTheme,
       lazyLoadThemes: options.lazyLoadThemes && !nuxt.options.dev
     }
     const registry = await generateThemeRegistry(themes, nuxt.options.buildDir)
 
-    nuxt.options.alias['@tixxin/theme-contracts'] = resolve(moduleRoot, 'packages/theme-contracts/src')
+    if (!nuxt.options.alias[contractsImportId]) {
+      nuxt.options.alias[contractsImportId] = contractsEntry
+    }
 
     addImportsDir(resolver.resolve('./runtime/composables'))
     addPlugin(resolver.resolve('./runtime/plugins/theme-sync.client'))
@@ -156,6 +225,11 @@ export default defineNuxtModule<ThemeEngineOptions>({
       getContents: () => serializeRegistry(registry)
     })
 
+    addTemplate({
+      filename: 'theme-engine.contracts.mjs',
+      getContents: () => serializeContracts(contractsEntry, contractsImportId)
+    })
+
     const cssReportTemplate = addTemplate({
       filename: 'theme-engine.css-report.mjs',
       getContents: () => serializeCssReport([])
@@ -163,7 +237,7 @@ export default defineNuxtModule<ThemeEngineOptions>({
 
     addTypeTemplate({
       filename: 'types/theme-components.d.ts',
-      getContents: () => generateThemeComponentDts(moduleRoot)
+      getContents: () => generateThemeComponentDts(contractsEntry, contractsImportId)
     })
 
     extendPages((pages) => {
