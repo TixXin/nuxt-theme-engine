@@ -1,0 +1,6 @@
+{
+  "name": "tix-classic",
+  "extends": "tix-three-column",
+  "label": "Tix Classic",
+  "description": "经典博客双栏模式，顶部导航栏，继承自 tix-three-column"
+}

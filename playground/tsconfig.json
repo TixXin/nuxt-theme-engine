@@ -1,16 +1,10 @@
 {
   "extends": "./.nuxt/tsconfig.json",
-  "compilerOptions": {
-    "baseUrl": "..",
-    "paths": {
-      "@tixxin/theme-contracts": [
-        "packages/theme-contracts/src"
-      ]
-    }
-  },
   "include": [
     "./app.vue",
     "./nuxt.config.ts",
+    "./pages/**/*.vue",
+    "./pages/**/*.ts",
     "./themes/**/*.vue",
     "./themes/**/*.ts",
     "../src/**/*.d.ts"

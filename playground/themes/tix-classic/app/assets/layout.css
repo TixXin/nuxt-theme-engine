@@ -1,0 +1,37 @@
+:root[data-theme="tix-classic"],
+:root[data-theme="tix-classic"] body {
+  overflow: auto;
+  height: auto;
+  margin: 0;
+  background: var(--theme-bg);
+  color: var(--theme-text);
+}
+
+.classic-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: var(--theme-bg);
+}
+
+.classic-layout__body {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px 32px;
+  flex: 1;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.classic-layout__main {
+  min-width: 0;
+}
+
+.classic-layout__sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}

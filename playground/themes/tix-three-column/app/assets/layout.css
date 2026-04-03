@@ -1,0 +1,64 @@
+:root[data-theme="tix-three-column"],
+:root[data-theme="tix-three-column"] body {
+  overflow: hidden;
+  height: 100vh;
+  margin: 0;
+  background: var(--theme-bg);
+  color: var(--theme-text);
+}
+
+.tix-layout {
+  display: grid;
+  grid-template-columns: 260px 1fr 280px;
+  grid-template-rows: 1fr;
+  height: 100vh;
+  overflow: hidden;
+  background: var(--theme-bg);
+}
+
+.tix-layout__sidebar {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow-y: auto;
+  scrollbar-width: none;
+  padding: 20px 16px;
+  gap: 16px;
+  border-right: 1px solid var(--theme-border);
+}
+
+.tix-layout__sidebar::-webkit-scrollbar {
+  display: none;
+}
+
+.tix-layout__center {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+
+.tix-layout__center::-webkit-scrollbar {
+  display: none;
+}
+
+.tix-layout__content {
+  flex: 1;
+  padding: 32px 40px;
+}
+
+.tix-layout__aside {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow-y: auto;
+  scrollbar-width: none;
+  padding: 20px 16px;
+  gap: 16px;
+  border-left: 1px solid var(--theme-border);
+}
+
+.tix-layout__aside::-webkit-scrollbar {
+  display: none;
+}

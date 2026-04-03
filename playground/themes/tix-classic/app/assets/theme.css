@@ -1,0 +1,11 @@
+[data-theme="tix-classic"] {
+  --theme-bg: #0d1117;
+  --theme-text: #e6edf3;
+  --theme-accent: #3fb950;
+  --theme-muted: rgba(139, 148, 158, 0.7);
+  --theme-card-bg: #161b22;
+  --theme-border: rgba(48, 54, 61, 0.6);
+  --theme-sidebar-bg: #0d1117;
+  --theme-hover-bg: rgba(63, 185, 80, 0.08);
+  --theme-nav-active: rgba(63, 185, 80, 0.15);
+}
