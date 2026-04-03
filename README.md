@@ -1,19 +1,19 @@
 # @tixxin/nuxt-theme-engine
 
-A Nuxt 4 theme engine with layered themes, typed contracts, and runtime theme switching.
+基于 Nuxt 4 的主题引擎，支持分层主题、类型化契约和运行时主题切换。
 
-## Features
+## 特性
 
-- **Layered Themes** -- Each theme is a self-contained directory with `theme.json`, components, and CSS. Themes can extend other themes via `extends` for component inheritance and fallback.
-- **Typed Contracts** -- Shared component props are defined in `@tixxin/theme-contracts`. Adding a new theme only requires implementing the contract interfaces.
-- **Runtime Switching** -- `useThemeEngine()` composable for switching themes at runtime with cookie/localStorage persistence. No page reload needed.
-- **Build-time Alias Generation** -- Each theme component gets a unique prefixed alias (e.g. `AuroraPostList`) and a dynamic loader, enabling both eager and lazy loading strategies.
-- **CSS Variable Governance** -- Themes declare `--theme-*` CSS variables scoped under `[data-theme="..."]`. The engine validates required variables at build time.
-- **`<ThemeComponent>` Distribution** -- A single component that resolves and renders theme-specific implementations by contract name, with named slot support for multi-column layouts.
-- **Theme-specific Config** -- `useThemeConfig()` provides per-theme KV storage isolated by theme name, persisted to localStorage and cookies.
-- **Nuxt DevTools Integration** -- Custom panel for inspecting registered themes, component mappings, and CSS variable coverage.
+- **分层主题** -- 每个主题是独立目录，包含 `theme.json`、组件和 CSS。通过 `extends` 实现主题继承与组件回退。
+- **类型化契约** -- 公共组件 Props 定义在 `@tixxin/theme-contracts` 中，新增主题只需实现契约接口。
+- **运行时切换** -- `useThemeEngine()` 组合式函数支持运行时切换主题，自动持久化到 Cookie/localStorage，无需刷新页面。
+- **构建时别名生成** -- 每个主题组件生成唯一前缀别名（如 `AuroraPostList`）和动态加载器，支持同步与懒加载两种策略。
+- **CSS 变量治理** -- 主题在 `[data-theme="..."]` 作用域下声明 `--theme-*` 变量，引擎在构建时校验必需变量。
+- **`<ThemeComponent>` 分发** -- 单一组件按契约名解析并渲染主题实现，支持 named slot 多栏布局。
+- **主题专属配置** -- `useThemeConfig()` 提供按主题隔离的 KV 存储，自动持久化到 localStorage 和 Cookie。
+- **Nuxt DevTools 集成** -- 自定义面板，可查看已注册主题、组件映射和 CSS 变量覆盖情况。
 
-## Quick Start
+## 快速开始
 
 ```bash
 pnpm add @tixxin/nuxt-theme-engine
@@ -49,74 +49,74 @@ export default defineNuxtConfig({
 </template>
 ```
 
-## Theme Structure
+## 主题目录结构
 
 ```
 themes/my-theme/
   theme.json              # name, label, extends, description
   app/
     assets/
-      theme.css           # CSS variables under [data-theme="my-theme"]
-      layout.css           # Layout-specific styles
+      theme.css           # [data-theme="my-theme"] 下的 CSS 变量
+      layout.css          # 布局样式
     components/
-      HomeLayout.vue       # Layout container with named slots
-      PostList.vue          # Article list
+      HomeLayout.vue      # 布局容器（支持 named slots）
+      PostList.vue        # 文章列表
       ...
 ```
 
-## Available Contracts
+## 可用契约
 
-| Contract | Props Interface | Description |
+| 契约名 | Props 接口 | 说明 |
 |---|---|---|
-| `HomeLayout` | `HomeLayoutProps` | Page layout container |
-| `PostList` | `PostListProps` | Article list |
-| `PostDetail` | `PostDetailProps` | Article detail |
-| `SidebarNav` | `SidebarNavProps` | Navigation (sidebar or top bar) |
-| `SiteStats` | `SiteStatsProps` | Site statistics widget |
-| `SubscribeCard` | `SubscribeCardProps` | Email subscription card |
-| `BlogFooter` | `BlogFooterProps` | Footer bar |
+| `HomeLayout` | `HomeLayoutProps` | 页面布局容器 |
+| `PostList` | `PostListProps` | 文章列表 |
+| `PostDetail` | `PostDetailProps` | 文章详情 |
+| `SidebarNav` | `SidebarNavProps` | 导航栏（侧栏或顶栏） |
+| `SiteStats` | `SiteStatsProps` | 站点统计小部件 |
+| `SubscribeCard` | `SubscribeCardProps` | 邮件订阅卡片 |
+| `BlogFooter` | `BlogFooterProps` | 底部栏 |
 
 ## Playground
 
-The `playground/` directory contains a working Nuxt app with four example themes:
+`playground/` 目录包含一个可运行的 Nuxt 应用，内含四个示例主题：
 
-| Theme | Layout | Description |
+| 主题 | 布局 | 说明 |
 |---|---|---|
-| `base` | Single column | Foundational fallback theme |
-| `aurora` | Single column | Inherits base, overrides PostList with card style |
-| `tix-three-column` | Three columns | Replicates tix.xin layout, no browser scrollbar |
-| `tix-classic` | Two columns + top nav | Extends tix-three-column, classic blog layout |
+| `base` | 单栏 | 基础回退主题 |
+| `aurora` | 单栏 | 继承 base，以卡片风格重写 PostList |
+| `tix-three-column` | 三栏 | 复刻 tix.xin 布局，浏览器无滚动条 |
+| `tix-classic` | 双栏 + 顶部导航 | 继承三栏主题，经典博客布局 |
 
 ```bash
 pnpm install
 pnpm dev
-# Open http://localhost:3000
+# 打开 http://localhost:3000
 ```
 
-## Development
+## 开发命令
 
 ```bash
-pnpm dev           # Start playground dev server
-pnpm dev:prepare   # Generate .nuxt types
-pnpm typecheck     # Type check module + playground
-pnpm build         # Build contracts + module
+pnpm dev           # 启动 playground 开发服务器
+pnpm dev:prepare   # 生成 .nuxt 类型声明
+pnpm typecheck     # 类型检查模块 + playground
+pnpm build         # 构建契约包 + 模块
 ```
 
-## Monorepo Structure
+## 仓库结构
 
 ```
 nuxt-theme-engine/
-  src/                    # Nuxt module source
-    module.ts             # Module entry
-    runtime/              # Composables, components, plugins
-    utils/                # Build-time utilities
+  src/                    # Nuxt 模块源码
+    module.ts             # 模块入口
+    runtime/              # 组合式函数、组件、插件
+    utils/                # 构建时工具
   packages/
-    theme-contracts/      # @tixxin/theme-contracts
-  playground/             # Example Nuxt app
-    themes/               # Example themes
-  docs/                   # Documentation
+    theme-contracts/      # @tixxin/theme-contracts 契约包
+  playground/             # 示例 Nuxt 应用
+    themes/               # 示例主题
+  docs/                   # 文档
 ```
 
-## License
+## 许可证
 
 [MIT](./LICENSE)
