@@ -76,6 +76,8 @@ export default defineNuxtConfig({
 </template>
 ```
 
+`ThemeComponent` 在主题切换时会优先保留当前已显示的组件树，等目标主题组件实际加载完成后再原子切换，以减少异步主题组件带来的空白闪屏。
+
 ## 自定义契约
 
 引擎本身不强绑定某一套业务契约。
