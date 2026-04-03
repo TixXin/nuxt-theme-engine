@@ -19,7 +19,7 @@
   "scripts": {
     "dev": "nuxi dev playground",
     "dev:prepare": "nuxi prepare playground",
-    "build": "pnpm --filter @tixxin/theme-contracts build && nuxt-module-build",
+    "build": "pnpm --filter @tixxin/theme-contracts build && nuxt-module-build build",
     "prepack": "pnpm build",
     "lint": "eslint .",
     "typecheck": "pnpm dev:prepare && tsc --noEmit -p tsconfig.json && vue-tsc --noEmit -p playground/.nuxt/tsconfig.json"
