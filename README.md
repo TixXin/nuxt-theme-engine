@@ -1,17 +1,42 @@
+<div align="center">
+
 # @tixxin/nuxt-theme-engine
 
-基于 Nuxt 4 的主题引擎，支持分层主题、类型化契约和运行时主题切换。
+**面向 Nuxt 4 的主题引擎：支持主题继承、运行时分发、类型安全契约与自定义契约入口**
 
-## 特性
+[![npm version](https://img.shields.io/npm/v/@tixxin/nuxt-theme-engine.svg)](https://npmjs.com/package/@tixxin/nuxt-theme-engine)
+[![Nuxt 4 Compatible](https://img.shields.io/badge/Nuxt-4.x-00C58E.svg)](https://nuxt.com)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
 
-- **分层主题** -- 每个主题是独立目录，包含 `theme.json`、组件和 CSS。通过 `extends` 实现主题继承与组件回退。
-- **类型化契约** -- 引擎支持通过 `contractsEntry` / `contractsImportId` 接入自定义契约；仓库内的 `@tixxin/theme-contracts` 只是默认博客示例契约。
-- **运行时切换** -- `useThemeEngine()` 组合式函数支持运行时切换主题，自动持久化到 Cookie/localStorage，无需刷新页面。
-- **构建时别名生成** -- 每个主题组件生成唯一前缀别名（如 `AuroraPostList`）和动态加载器，支持同步与懒加载两种策略。
-- **CSS 变量治理** -- 主题在 `[data-theme="..."]` 作用域下声明 `--theme-*` 变量，引擎在构建时校验必需变量。
-- **`<ThemeComponent>` 分发** -- 单一组件按契约名解析并渲染主题实现，支持 named slot 多栏布局。
-- **主题专属配置** -- `useThemeConfig()` 提供按主题隔离的 KV 存储，自动持久化到 localStorage 和 Cookie。
-- **Nuxt DevTools 集成** -- 自定义面板，可查看已注册主题、组件映射和 CSS 变量覆盖情况。
+</div>
+
+## 这个项目解决什么问题
+
+如果你的站点不只是“换一套颜色”，而是需要在运行时切换：
+
+- 不同主题下的布局结构
+- 不同主题下的组件实现
+- 不同主题下的样式体系和主题配置
+
+那么 `@tixxin/nuxt-theme-engine` 的目标就是把这些能力从具体业务里抽离出来，变成一套可复用的 Nuxt 模块。
+
+## 适用场景
+
+- 博客、内容站、多主题门户
+- 同一套业务模型，需要支持多套前台主题
+- 需要主题继承、组件 fallback 和按需加载
+- 需要在 IDE 中保留 `<ThemeComponent>` 的类型提示和 Props 校验
+
+## 核心能力
+
+- **分层主题**：每个主题都是独立目录，包含 `theme.json`、组件和 CSS，可通过 `extends` 继承父主题
+- **运行时分发**：统一使用 `<ThemeComponent>` 按逻辑组件名渲染当前主题实现
+- **构建时注册**：自动生成主题前缀别名和继承 fallback，减少运行时查找成本
+- **类型安全**：基于契约自动生成类型声明，给 `name` 和 Props 提供补全与校验
+- **自定义契约**：支持通过 `contractsEntry` / `contractsImportId` 接入你自己的契约入口
+- **主题配置隔离**：`useThemeConfig()` 按主题维护独立展示配置
+- **样式治理**：按 `[data-theme="..."]` 作用域管理 CSS 变量，并支持必需变量校验
+- **调试能力**：可接入 Nuxt DevTools 查看主题、继承链和 CSS 变量覆盖情况
 
 ## 快速开始
 
@@ -28,9 +53,7 @@ export default defineNuxtConfig({
     defaultTheme: 'base',
     cookieKey: 'site-theme',
     lazyLoadThemes: true,
-    requiredCssVars: ['--theme-bg', '--theme-text', '--theme-accent', '--theme-muted'],
-    contractsEntry: '@tixxin/theme-contracts',
-    contractsImportId: '@tixxin/theme-contracts'
+    requiredCssVars: ['--theme-bg', '--theme-text', '--theme-accent', '--theme-muted']
   }
 })
 ```
@@ -51,46 +74,22 @@ export default defineNuxtConfig({
 </template>
 ```
 
-## 主题目录结构
-
-```
-themes/my-theme/
-  theme.json              # name, label, extends, description
-  app/
-    assets/
-      theme.css           # [data-theme="my-theme"] 下的 CSS 变量
-      layout.css          # 布局样式
-    components/
-      HomeLayout.vue      # 布局容器（支持 named slots）
-      PostList.vue        # 文章列表
-      ...
-```
-
-## 可用契约
-
-默认仓库内置了一套博客场景契约，定义在 `packages/theme-contracts` 中。它是**默认/示例契约**，不是所有项目都必须共用的唯一标准。
-
-| 契约名 | Props 接口 | 说明 |
-|---|---|---|
-| `HomeLayout` | `HomeLayoutProps` | 页面布局容器 |
-| `PostList` | `PostListProps` | 文章列表 |
-| `PostDetail` | `PostDetailProps` | 文章详情 |
-| `SidebarNav` | `SidebarNavProps` | 导航栏（侧栏或顶栏） |
-| `SiteStats` | `SiteStatsProps` | 站点统计小部件 |
-| `SubscribeCard` | `SubscribeCardProps` | 邮件订阅卡片 |
-| `BlogFooter` | `BlogFooterProps` | 底部栏 |
-
 ## 自定义契约
 
-如果你的项目不是博客场景，可以提供自己的契约入口文件或独立 npm 包。
+引擎本身不强绑定某一套业务契约。
 
-### 方式 1：使用本地契约文件
+仓库里的 `@tixxin/theme-contracts` 只是**默认博客示例契约**。如果你的项目是电商、文档站、社区或其他业务，可以直接换成自己的契约入口。
+
+### 使用本地契约文件
 
 ```ts
-// nuxt.config.ts
+import { fileURLToPath } from 'node:url'
+
+const contractsEntry = fileURLToPath(new URL('./theme-contracts/index.ts', import.meta.url))
+
 export default defineNuxtConfig({
   alias: {
-    '#theme-contracts': './theme-contracts/index.ts'
+    '#theme-contracts': contractsEntry
   },
   modules: ['@tixxin/nuxt-theme-engine'],
   themeEngine: {
@@ -100,7 +99,7 @@ export default defineNuxtConfig({
 })
 ```
 
-### 方式 2：使用你自己的契约包
+### 使用你自己的契约包
 
 ```ts
 export default defineNuxtConfig({
@@ -112,52 +111,59 @@ export default defineNuxtConfig({
 })
 ```
 
-你的契约入口需要导出：
+你的契约入口至少需要导出：
 
 - `ThemeComponentContracts`
 - `themeContractNames`
-- 可选的各类 Props / 数据接口
 
-## Playground
+## 示例主题与 Playground
 
-`playground/` 目录包含一个可运行的 Nuxt 应用，内含四个示例主题：
+`playground/` 中提供了完整示例，既覆盖默认博客契约，也演示了项目内本地契约入口：
 
 | 主题 | 布局 | 说明 |
 |---|---|---|
 | `base` | 单栏 | 基础回退主题 |
-| `aurora` | 单栏 | 继承 base，以卡片风格重写 PostList |
-| `tix-three-column` | 三栏 | 复刻 tix.xin 布局，浏览器无滚动条 |
+| `aurora` | 单栏 | 继承 `base`，以卡片风格重写列表 |
+| `tix-three-column` | 三栏 | 复刻 tix.xin 风格布局，浏览器无滚动条 |
 | `tix-classic` | 双栏 + 顶部导航 | 继承三栏主题，经典博客布局 |
 
 ```bash
 pnpm install
 pnpm dev
-# 打开 http://localhost:3000
 ```
 
-## 开发命令
+## 文档导航
+
+- [用户使用指南](./docs/用户使用指南.md)
+- [架构与目录结构说明](./docs/架构与目录结构说明.md)
+- [设计提案：主题引擎架构](./docs/设计提案-主题引擎架构.md)
+- [NPM 发布指南](./docs/NPM-发布指南.md)
+
+## 开发与发布
 
 ```bash
-pnpm dev           # 启动 playground 开发服务器
+pnpm dev           # 启动 playground
 pnpm dev:prepare   # 生成 .nuxt 类型声明
-pnpm typecheck     # 类型检查模块 + playground
-pnpm build         # 构建契约包 + 模块
+pnpm typecheck     # 类型检查模块与 playground
+pnpm build         # 构建契约包和模块
 ```
 
-## 仓库结构
+仓库结构：
 
-```
+```text
 nuxt-theme-engine/
-  src/                    # Nuxt 模块源码
-    module.ts             # 模块入口
-    runtime/              # 组合式函数、组件、插件
-    utils/                # 构建时工具
-  packages/
-    theme-contracts/      # @tixxin/theme-contracts 契约包
-  playground/             # 示例 Nuxt 应用
-    themes/               # 示例主题
-  docs/                   # 文档
+├── src/                     # 模块源码
+├── packages/theme-contracts # 默认博客示例契约
+├── playground/              # 示例应用与主题
+└── docs/                    # 面向公开仓库的长期文档
 ```
+
+## 贡献
+
+欢迎通过 Issue 和 Pull Request 参与改进。开始前可先阅读：
+
+- [贡献指南](./CONTRIBUTING.md)
+- [架构与目录结构说明](./docs/架构与目录结构说明.md)
 
 ## 许可证
 
