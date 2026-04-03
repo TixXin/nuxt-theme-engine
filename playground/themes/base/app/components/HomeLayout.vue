@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { HomeLayoutProps } from '@tixxin/theme-contracts'
+import type { HomeLayoutProps } from '#theme-contracts'
 
 defineProps<HomeLayoutProps>()
 </script>

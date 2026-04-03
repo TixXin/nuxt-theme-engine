@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { PostListProps } from '@tixxin/theme-contracts'
+import type { PostListProps } from '#theme-contracts'
 
 defineProps<PostListProps>()
 </script>

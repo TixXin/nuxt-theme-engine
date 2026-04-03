@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { SubscribeCardProps } from '@tixxin/theme-contracts'
+import type { SubscribeCardProps } from '#theme-contracts'
 
 const props = withDefaults(defineProps<SubscribeCardProps>(), {
   description: '获取最新文章和技术分享，不会发送垃圾邮件。',

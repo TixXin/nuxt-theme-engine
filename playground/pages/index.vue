@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useThemeConfig, useThemeEngine } from '#imports'
 import { computed, ref } from 'vue'
-import type { NavItem, SiteStatsData, ThemePostDetail, ThemePostSummary } from '@tixxin/theme-contracts'
+import type { NavItem, SiteStatsData, ThemePostDetail, ThemePostSummary } from '#theme-contracts'
 
 const { currentTheme, availableThemes, setTheme } = useThemeEngine()
 const { getThemeOption, setThemeOption } = useThemeConfig()

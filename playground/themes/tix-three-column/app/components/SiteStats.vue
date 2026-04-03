@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { SiteStatsProps } from '@tixxin/theme-contracts'
+import type { SiteStatsProps } from '#theme-contracts'
 
 defineProps<SiteStatsProps>()
 

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { BlogFooterProps } from '@tixxin/theme-contracts'
+import type { BlogFooterProps } from '#theme-contracts'
 
 const props = withDefaults(defineProps<BlogFooterProps>(), {
   copyright: '2026 TixXin Blog. All rights reserved.',

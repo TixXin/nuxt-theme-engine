@@ -5,6 +5,7 @@
     "./nuxt.config.ts",
     "./pages/**/*.vue",
     "./pages/**/*.ts",
+    "./theme-contracts/**/*.ts",
     "./themes/**/*.vue",
     "./themes/**/*.ts",
     "../src/**/*.d.ts"

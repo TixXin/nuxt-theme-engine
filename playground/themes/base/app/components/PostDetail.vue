@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { PostDetailProps } from '@tixxin/theme-contracts'
+import type { PostDetailProps } from '#theme-contracts'
 
 defineProps<PostDetailProps>()
 </script>

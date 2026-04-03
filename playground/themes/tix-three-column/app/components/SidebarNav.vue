@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { SidebarNavProps } from '@tixxin/theme-contracts'
+import type { SidebarNavProps } from '#theme-contracts'
 
 defineProps<SidebarNavProps>()
 </script>
