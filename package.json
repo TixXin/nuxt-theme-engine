@@ -1,6 +1,6 @@
 {
   "name": "@tixxin/nuxt-theme-engine",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "type": "module",
   "description": "A Nuxt 4 theme engine with layered themes, typed contracts, and runtime theme switching.",
   "license": "MIT",
@@ -11,6 +11,10 @@
       "types": "./dist/types.d.mts",
       "import": "./dist/module.mjs"
     },
+    "./default-contracts": {
+      "types": "./dist/default-contracts.d.mts",
+      "import": "./dist/default-contracts.mjs"
+    },
     "./runtime/*": "./dist/runtime/*"
   },
   "files": [
@@ -19,7 +23,7 @@
   "scripts": {
     "dev": "nuxi dev playground",
     "dev:prepare": "nuxi prepare playground",
-    "build": "pnpm --filter @tixxin/theme-contracts build && nuxt-module-build build",
+    "build": "nuxt-module-build build",
     "prepack": "pnpm build",
     "lint": "eslint .",
     "typecheck": "pnpm dev:prepare && tsc --noEmit -p tsconfig.json && vue-tsc --noEmit -p playground/.nuxt/tsconfig.json"
@@ -28,7 +32,6 @@
     "nuxt": "^4.0.0"
   },
   "dependencies": {
-    "@tixxin/theme-contracts": "workspace:*",
     "defu": "^6.1.6",
     "fast-glob": "^3.3.3",
     "pathe": "^2.0.3",

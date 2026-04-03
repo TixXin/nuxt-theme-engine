@@ -1,6 +1,6 @@
 # NPM 发布指南：@tixxin/nuxt-theme-engine
 
-本文档说明如何将 `@tixxin/nuxt-theme-engine` 及其相关包发布到 NPM 仓库。注意：`@tixxin/theme-contracts` 只是当前仓库里的默认博客示例契约，并不是所有使用者都必须发布和安装的统一标准契约。
+本文档说明如何将 `@tixxin/nuxt-theme-engine` 及其相关包发布到 NPM 仓库。注意：默认博客契约已经内置到 `@tixxin/nuxt-theme-engine` 发布包中；`@tixxin/theme-contracts` 只是当前仓库里的开发期/示例契约来源，并不是所有使用者都必须发布和安装的统一标准契约。
 
 ## 1. 包结构规划
 
@@ -80,21 +80,19 @@ npm publish --access public
 
 ## 5. 在其他项目中使用
 
-### 5.1 复用默认契约包
+### 5.1 复用内置默认契约
 
 ```bash
-npm install @tixxin/nuxt-theme-engine @tixxin/theme-contracts
+npm install @tixxin/nuxt-theme-engine
 ```
 
 ```ts
 export default defineNuxtConfig({
-  modules: ['@tixxin/nuxt-theme-engine'],
-  themeEngine: {
-    contractsEntry: '@tixxin/theme-contracts',
-    contractsImportId: '@tixxin/theme-contracts'
-  }
+  modules: ['@tixxin/nuxt-theme-engine']
 })
 ```
+
+如果你需要直接复用默认博客 Props 类型，可从 `@tixxin/nuxt-theme-engine/default-contracts` 导入。
 
 ### 5.2 使用你自己的契约包
 
@@ -145,5 +143,5 @@ export default defineNuxtConfig({
 
 - **包名冲突**：若 `@tixxin` scope 已被占用，需要更换 scope 或包名。
 - **构建产物缺失**：检查 `files` 字段是否正确包含 `dist`。
-- **依赖错误**：运行时依赖放入 `dependencies`，开发依赖放入 `devDependencies`。
-- **是否必须发布 `@tixxin/theme-contracts`**：不必须。只有当你希望复用默认博客契约，或希望把自己的契约包独立发版时，才需要发布契约包。
+- **依赖错误**：发布前务必检查 `package.json` 与 `pnpm pack` 产物，确保不会把 `workspace:*` 原样带进最终 tarball。
+- **是否必须发布 `@tixxin/theme-contracts`**：不必须。默认博客契约已内置在主题引擎包里。只有当你希望把自己的契约包独立发版时，才需要额外发布契约包。

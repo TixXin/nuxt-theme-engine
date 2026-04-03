@@ -2,10 +2,8 @@ import { defineBuildConfig } from 'unbuild'
 
 export default defineBuildConfig({
   entries: [
-    './src/module'
+    './src/module',
+    './src/default-contracts'
   ],
-  failOnWarn: false,
-  externals: [
-    '@tixxin/theme-contracts'
-  ]
+  failOnWarn: false
 })

@@ -44,6 +44,8 @@
 pnpm add @tixxin/nuxt-theme-engine
 ```
 
+默认博客契约已经内置在 `@tixxin/nuxt-theme-engine` 发布包内，消费者**不需要额外安装** `@tixxin/theme-contracts`。
+
 ```ts
 // nuxt.config.ts
 export default defineNuxtConfig({
@@ -78,7 +80,9 @@ export default defineNuxtConfig({
 
 引擎本身不强绑定某一套业务契约。
 
-仓库里的 `@tixxin/theme-contracts` 只是**默认博客示例契约**。如果你的项目是电商、文档站、社区或其他业务，可以直接换成自己的契约入口。
+模块默认会使用内置的博客示例契约，等价导入路径为 `@tixxin/nuxt-theme-engine/default-contracts`。
+
+仓库里的 `@tixxin/theme-contracts` 现在只是**开发期/示例来源**。如果你的项目是电商、文档站、社区或其他业务，可以直接换成自己的契约入口。
 
 ### 使用本地契约文件
 
@@ -145,7 +149,7 @@ pnpm dev
 pnpm dev           # 启动 playground
 pnpm dev:prepare   # 生成 .nuxt 类型声明
 pnpm typecheck     # 类型检查模块与 playground
-pnpm build         # 构建契约包和模块
+pnpm build         # 构建主题引擎模块与内置默认契约
 ```
 
 仓库结构：

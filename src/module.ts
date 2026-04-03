@@ -19,14 +19,16 @@ import { generateThemeRegistry } from './utils/generateAlias'
 import { loadThemeDefinitions } from './utils/parseThemeJson'
 import type { CssVariableReport, GeneratedThemeRegistry, ThemeEngineOptions } from './types'
 
+const DEFAULT_CONTRACTS_IMPORT_ID = '@tixxin/nuxt-theme-engine/default-contracts'
+
 const DEFAULTS: Required<ThemeEngineOptions> = {
   themesDir: 'themes',
   defaultTheme: 'base',
   cookieKey: 'theme-pref',
   lazyLoadThemes: false,
   requiredCssVars: [],
-  contractsEntry: '@tixxin/theme-contracts',
-  contractsImportId: '@tixxin/theme-contracts'
+  contractsEntry: DEFAULT_CONTRACTS_IMPORT_ID,
+  contractsImportId: DEFAULT_CONTRACTS_IMPORT_ID
 }
 
 const require = createRequire(import.meta.url)
@@ -53,11 +55,15 @@ async function resolveContractsEntry(
   importId: string,
   rootDir: string,
   moduleRoot: string,
+  defaultContractsEntry: string,
   aliases: Record<string, string | undefined>
 ) {
-  const internalDefaultEntry = resolve(moduleRoot, 'packages/theme-contracts/src/index.ts')
-  if ((entry === '@tixxin/theme-contracts' || entry === 'packages/theme-contracts/src/index.ts') && await pathExists(internalDefaultEntry)) {
-    return internalDefaultEntry
+  if (entry === DEFAULT_CONTRACTS_IMPORT_ID || importId === DEFAULT_CONTRACTS_IMPORT_ID) {
+    return defaultContractsEntry
+  }
+
+  if (entry === 'packages/theme-contracts/src/index.ts' && await pathExists(resolve(rootDir, entry))) {
+    return resolve(rootDir, entry)
   }
 
   const aliasTarget = aliases[entry] ?? aliases[importId]
@@ -161,6 +167,7 @@ export default defineNuxtModule<ThemeEngineOptions>({
   async setup(moduleOptions, nuxt) {
     const resolver = createResolver(import.meta.url)
     const moduleRoot = resolver.resolve('..')
+    const defaultContractsEntry = resolver.resolve('./default-contracts')
     const options = {
       ...DEFAULTS,
       ...moduleOptions
@@ -172,6 +179,7 @@ export default defineNuxtModule<ThemeEngineOptions>({
       contractsImportId,
       nuxt.options.rootDir,
       moduleRoot,
+      defaultContractsEntry,
       nuxt.options.alias as Record<string, string | undefined>
     )
     const themes = await loadThemeDefinitions(themesDir)

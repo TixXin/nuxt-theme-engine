@@ -13,15 +13,11 @@
     "isolatedModules": true,
     "verbatimModuleSyntax": true,
     "types": ["node"],
-    "baseUrl": ".",
-    "paths": {
-      "@tixxin/theme-contracts": [
-        "./packages/theme-contracts/src"
-      ]
-    }
+    "baseUrl": "."
   },
   "include": [
     "src/module.ts",
+    "src/default-contracts.ts",
     "src/types.ts",
     "src/**/*.d.ts",
     "src/utils/**/*.ts",

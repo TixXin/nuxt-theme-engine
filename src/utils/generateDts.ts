@@ -1,5 +1,7 @@
 import { promises as fs } from 'node:fs'
 
+const DEFAULT_CONTRACTS_IMPORT_ID = '@tixxin/nuxt-theme-engine/default-contracts'
+
 function parseContractNames(source: string) {
   const match = source.match(/themeContractNames\s*=\s*\[([\s\S]*?)\]\s*as const/)
   if (!match) {
@@ -16,12 +18,13 @@ function parseContractNames(source: string) {
 export async function generateThemeComponentDts(contractsSourcePath: string, contractsImportId: string) {
   const source = await fs.readFile(contractsSourcePath, 'utf8')
   const names = parseContractNames(source)
+  const importSource = contractsImportId || DEFAULT_CONTRACTS_IMPORT_ID
   const union = names.length > 0
     ? names.map(name => `'${name}'`).join(' | ')
     : 'never'
 
   return `import type { DefineComponent } from 'vue'
-import type { ThemeComponentContracts } from ${JSON.stringify(contractsImportId)}
+import type { ThemeComponentContracts } from ${JSON.stringify(importSource)}
 
 declare module '#build/theme-engine.contracts.mjs' {
   export const themeEngineContracts: {
