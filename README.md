@@ -10,6 +10,13 @@
 
 </div>
 
+## 项目案例
+
+当前使用主题引擎的项目：
+
+- 在线预览：[https://tix.xin](https://tix.xin)
+- GitHub：[TixXin/TixXinBlog](https://github.com/TixXin/TixXinBlog)
+
 ## 这个项目解决什么问题
 
 如果你的站点不只是“换一套颜色”，而是需要在运行时切换：
@@ -37,14 +44,6 @@
 - **主题配置隔离**：`useThemeConfig()` 按主题维护独立展示配置
 - **样式治理**：按 `[data-theme="..."]` 作用域管理 CSS 变量，并支持必需变量校验
 - **调试能力**：可接入 Nuxt DevTools 查看主题、继承链和 CSS 变量覆盖情况
-
-## 项目案例
-
-当前使用主题引擎的项目：
-
-- 在线预览：[https://tix.xin](https://tix.xin)
-- GitHub：[TixXin/TixXinBlog](https://github.com/TixXin/TixXinBlog)
-
 
 
 ## 快速开始
