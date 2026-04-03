@@ -5,7 +5,7 @@
 ## 特性
 
 - **分层主题** -- 每个主题是独立目录，包含 `theme.json`、组件和 CSS。通过 `extends` 实现主题继承与组件回退。
-- **类型化契约** -- 公共组件 Props 定义在 `@tixxin/theme-contracts` 中，新增主题只需实现契约接口。
+- **类型化契约** -- 引擎支持通过 `contractsEntry` / `contractsImportId` 接入自定义契约；仓库内的 `@tixxin/theme-contracts` 只是默认博客示例契约。
 - **运行时切换** -- `useThemeEngine()` 组合式函数支持运行时切换主题，自动持久化到 Cookie/localStorage，无需刷新页面。
 - **构建时别名生成** -- 每个主题组件生成唯一前缀别名（如 `AuroraPostList`）和动态加载器，支持同步与懒加载两种策略。
 - **CSS 变量治理** -- 主题在 `[data-theme="..."]` 作用域下声明 `--theme-*` 变量，引擎在构建时校验必需变量。
@@ -28,7 +28,9 @@ export default defineNuxtConfig({
     defaultTheme: 'base',
     cookieKey: 'site-theme',
     lazyLoadThemes: true,
-    requiredCssVars: ['--theme-bg', '--theme-text', '--theme-accent', '--theme-muted']
+    requiredCssVars: ['--theme-bg', '--theme-text', '--theme-accent', '--theme-muted'],
+    contractsEntry: '@tixxin/theme-contracts',
+    contractsImportId: '@tixxin/theme-contracts'
   }
 })
 ```
@@ -66,6 +68,8 @@ themes/my-theme/
 
 ## 可用契约
 
+默认仓库内置了一套博客场景契约，定义在 `packages/theme-contracts` 中。它是**默认/示例契约**，不是所有项目都必须共用的唯一标准。
+
 | 契约名 | Props 接口 | 说明 |
 |---|---|---|
 | `HomeLayout` | `HomeLayoutProps` | 页面布局容器 |
@@ -75,6 +79,44 @@ themes/my-theme/
 | `SiteStats` | `SiteStatsProps` | 站点统计小部件 |
 | `SubscribeCard` | `SubscribeCardProps` | 邮件订阅卡片 |
 | `BlogFooter` | `BlogFooterProps` | 底部栏 |
+
+## 自定义契约
+
+如果你的项目不是博客场景，可以提供自己的契约入口文件或独立 npm 包。
+
+### 方式 1：使用本地契约文件
+
+```ts
+// nuxt.config.ts
+export default defineNuxtConfig({
+  alias: {
+    '#theme-contracts': './theme-contracts/index.ts'
+  },
+  modules: ['@tixxin/nuxt-theme-engine'],
+  themeEngine: {
+    contractsEntry: '#theme-contracts',
+    contractsImportId: '#theme-contracts'
+  }
+})
+```
+
+### 方式 2：使用你自己的契约包
+
+```ts
+export default defineNuxtConfig({
+  modules: ['@tixxin/nuxt-theme-engine'],
+  themeEngine: {
+    contractsEntry: '@your-scope/theme-contracts',
+    contractsImportId: '@your-scope/theme-contracts'
+  }
+})
+```
+
+你的契约入口需要导出：
+
+- `ThemeComponentContracts`
+- `themeContractNames`
+- 可选的各类 Props / 数据接口
 
 ## Playground
 

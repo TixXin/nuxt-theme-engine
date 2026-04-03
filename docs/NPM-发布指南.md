@@ -1,6 +1,6 @@
 # NPM 发布指南：@tixxin/nuxt-theme-engine
 
-本文档说明如何将 `@tixxin/nuxt-theme-engine` 及其相关包（如 `@tixxin/theme-contracts`）发布到 NPM 仓库，以便其他项目可以通过 `npm install` 引入并使用。
+本文档说明如何将 `@tixxin/nuxt-theme-engine` 及其相关包发布到 NPM 仓库。注意：`@tixxin/theme-contracts` 只是当前仓库里的默认博客示例契约，并不是所有使用者都必须发布和安装的统一标准契约。
 
 ## 1. 包结构规划
 
@@ -40,29 +40,99 @@ pnpm run build
 
 对于 `@tixxin/nuxt-theme-engine`，通常会由 `unbuild` 生成 `dist/`，其中包含 `module.mjs`、`module.cjs`、`module.d.ts` 等文件。
 
-## 3. 发布流程
+## 3. 哪些包需要发布
 
-### 3.1 登录 NPM
+### 3.1 `@tixxin/nuxt-theme-engine`
+
+这是主题引擎本体，通常应该发布。
+
+### 3.2 `@tixxin/theme-contracts`
+
+这个包是否发布，取决于你的产品定位：
+
+- 如果你维护的是一套博客主题体系，希望多项目复用同一组博客契约，那么可以发布它。
+- 如果你的使用方会定义自己的契约入口，那么**不必**强制发布它。
+- 如果你只是把它当作默认/示例契约，也可以只在仓库内保留，不对外强调必须安装。
+
+## 4. 发布流程
+
+### 4.1 登录 NPM
 如尚未登录：
 
 ```bash
 npm login
 ```
 
-### 3.2 发布包
+### 4.2 发布包
 在每个需要发布的包目录内执行发布命令：
 
 ```bash
 cd packages/theme-contracts
 npm publish --access public
 
-cd ../nuxt-theme-engine
+cd ../..
 npm publish --access public
 ```
 
 如果包名包含 scope，例如 `@tixxin/`，首次发布时必须带上 `--access public`，否则 NPM 会默认按私有包处理。
 
-## 4. 自动化发布
+如果你只发布主题引擎本体，则只需要执行根目录的发布命令。
+
+## 5. 在其他项目中使用
+
+### 5.1 复用默认契约包
+
+```bash
+npm install @tixxin/nuxt-theme-engine @tixxin/theme-contracts
+```
+
+```ts
+export default defineNuxtConfig({
+  modules: ['@tixxin/nuxt-theme-engine'],
+  themeEngine: {
+    contractsEntry: '@tixxin/theme-contracts',
+    contractsImportId: '@tixxin/theme-contracts'
+  }
+})
+```
+
+### 5.2 使用你自己的契约包
+
+```bash
+npm install @tixxin/nuxt-theme-engine @your-scope/theme-contracts
+```
+
+```ts
+export default defineNuxtConfig({
+  modules: ['@tixxin/nuxt-theme-engine'],
+  themeEngine: {
+    contractsEntry: '@your-scope/theme-contracts',
+    contractsImportId: '@your-scope/theme-contracts'
+  }
+})
+```
+
+### 5.3 使用项目内本地契约文件
+
+```ts
+export default defineNuxtConfig({
+  alias: {
+    '#theme-contracts': './theme-contracts/index.ts'
+  },
+  modules: ['@tixxin/nuxt-theme-engine'],
+  themeEngine: {
+    contractsEntry: '#theme-contracts',
+    contractsImportId: '#theme-contracts'
+  }
+})
+```
+
+你的契约入口应至少导出：
+
+- `ThemeComponentContracts`
+- `themeContractNames`
+
+## 6. 自动化发布
 
 建议使用 GitHub Actions 搭配 Changesets 或 Release-it 实现自动化发布流程：
 
@@ -71,27 +141,9 @@ npm publish --access public
 3. 在 CI 中执行测试。
 4. 当代码合并到主分支且版本号变更后，自动执行 `npm publish`。
 
-## 5. 常见问题
+## 7. 常见问题
 
 - **包名冲突**：若 `@tixxin` scope 已被占用，需要更换 scope 或包名。
 - **构建产物缺失**：检查 `files` 字段是否正确包含 `dist`。
 - **依赖错误**：运行时依赖放入 `dependencies`，开发依赖放入 `devDependencies`。
-
-## 6. 在其他项目中使用
-
-发布成功后，其他 Nuxt 4 项目可直接安装：
-
-```bash
-npm install @tixxin/nuxt-theme-engine @tixxin/theme-contracts
-```
-
-然后在 `nuxt.config.ts` 中注册模块：
-
-```ts
-export default defineNuxtConfig({
-  modules: ['@tixxin/nuxt-theme-engine'],
-  themeEngine: {
-    // 你的配置
-  }
-})
-```
+- **是否必须发布 `@tixxin/theme-contracts`**：不必须。只有当你希望复用默认博客契约，或希望把自己的契约包独立发版时，才需要发布契约包。
