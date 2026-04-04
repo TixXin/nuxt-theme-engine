@@ -134,7 +134,9 @@ function serializeOptions(options: Required<ThemeEngineOptions>, themes: Awaited
   const serializedThemes = themes.map(theme => ({
     name: theme.name,
     label: theme.label,
+    description: theme.description ?? null,
     extends: theme.extends ?? null,
+    meta: theme.meta,
     inheritanceChain: theme.inheritanceChain
   }))
 

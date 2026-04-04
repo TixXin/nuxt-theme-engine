@@ -8,7 +8,8 @@ const themeJsonSchema = z.object({
   name: z.string().min(1).regex(/^[a-z0-9-]+$/),
   extends: z.string().min(1).regex(/^[a-z0-9-]+$/).optional(),
   label: z.string().min(1).optional(),
-  description: z.string().min(1).optional()
+  description: z.string().min(1).optional(),
+  meta: z.record(z.string(), z.unknown()).optional()
 }) satisfies z.ZodType<ThemeJson>
 
 async function fileExists(path: string) {
@@ -96,6 +97,7 @@ export async function loadThemeDefinitions(themesDir: string): Promise<ThemeDefi
       label: json.label ?? json.name,
       description: json.description,
       extends: json.extends,
+      meta: json.meta,
       path: themePath,
       themeJsonPath,
       componentsDir,

@@ -14,7 +14,9 @@ declare module '#build/theme-engine.options.mjs' {
   export const themeEngineThemes: Array<{
     name: string
     label: string
+    description: string | null
     extends: string | null
+    meta?: Record<string, unknown>
     inheritanceChain: string[]
   }>
 }

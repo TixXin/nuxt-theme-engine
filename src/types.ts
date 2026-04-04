@@ -13,6 +13,7 @@ export interface ThemeJson {
   extends?: string
   label?: string
   description?: string
+  meta?: Record<string, unknown>
 }
 
 export interface ThemeDefinition {
@@ -20,6 +21,7 @@ export interface ThemeDefinition {
   label: string
   description?: string
   extends?: string
+  meta?: Record<string, unknown>
   path: string
   themeJsonPath: string
   componentsDir: string

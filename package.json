@@ -1,6 +1,6 @@
 {
   "name": "@tixxin/nuxt-theme-engine",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "type": "module",
   "description": "A Nuxt 4 theme engine with layered themes, typed contracts, and runtime theme switching.",
   "license": "MIT",
