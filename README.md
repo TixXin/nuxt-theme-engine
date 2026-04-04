@@ -43,8 +43,36 @@
 - **自定义契约**：支持通过 `contractsEntry` / `contractsImportId` 接入你自己的契约入口
 - **主题配置隔离**：`useThemeConfig()` 按主题维护独立展示配置
 - **样式治理**：按 `[data-theme="..."]` 作用域管理 CSS 变量，并支持必需变量校验
+- **主题元数据扩展**：`theme.json` 支持可选 `meta` 字段，可放入版本号、图标、作者等任意键值对
 - **调试能力**：可接入 Nuxt DevTools 查看主题、继承链和 CSS 变量覆盖情况
 
+## 主题配置文件
+
+每个主题目录下需要一个 `theme.json`：
+
+```json
+{
+  "name": "my-theme",
+  "label": "My Theme",
+  "description": "一个示例主题",
+  "extends": "base",
+  "meta": {
+    "version": "1.0.0",
+    "icon": "carbon:paint-brush",
+    "author": "TixXin"
+  }
+}
+```
+
+| 字段 | 必填 | 说明 |
+|---|---|---|
+| `name` | 是 | 主题标识，匹配 `^[a-z0-9-]+$` |
+| `label` | 否 | UI 显示名称，默认取 `name` |
+| `description` | 否 | 主题描述，会透传到运行时 `themeDefinitions` |
+| `extends` | 否 | 父主题名称，未实现的组件自动 fallback 到父主题 |
+| `meta` | 否 | 任意键值对，可存放版本号、图标、作者等扩展信息 |
+
+`description` 和 `meta` 均会透传到运行时，可通过 `useThemeEngine().themeDefinitions` 读取。
 
 ## 快速开始
 
